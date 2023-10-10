@@ -10,22 +10,28 @@ def connect_db(app):
     db.init_app(app)
 
 def get_cocktail_data(flavor_pref, liquor_pref, diet):
-    base_url = "https://www.thecocktaildb.com/api.php"
+    base_url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?"
 
     params = {
         "i": liquor_pref,
         "c": flavor_pref,
-        "a": diet
+        "a": ",".join(diet)
     }
 
-    response = requests.get(base_url, params=params)
+    try:
+        response = requests.get(base_url, params=params)
+        response.raise_for_status()  # Raise an exception if the response status code is not 200 (OK)
 
-    if response.status_code == 200:
         data = response.json()
-
         return data
-    else:
-        return None 
+    except requests.exceptions.RequestException as e:
+        # Handle any request-related errors here
+        print(f"Request Error: {e}")
+        return None
+    except ValueError as e:
+        # Handle JSON decoding error here
+        print(f"JSON Decoding Error: {e}")
+        return None
     
 
 class User(db.Model):

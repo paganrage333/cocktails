@@ -128,3 +128,18 @@ def homepage():
             return "Error fetching cocktail data from API"
         
     return render_template("index.html", form=form)
+
+@app.route("/results", methods=["GET"])
+def results():
+    # Fetch the cocktail data (you may need to modify this logic)
+    flavor_preference = request.args.get("flavor_preference")
+    liquor_preference = request.args.get("liquor_preference")
+    dietary_restrictions = request.args.getlist("dietary_restrictions")
+    
+    cocktail_data = get_cocktail_data(flavor_preference, liquor_preference, dietary_restrictions)
+    
+    if cocktail_data:
+        return render_template("results.html", cocktails=cocktail_data["drinks"])
+    else:
+        return "Error fetching cocktail data from API"
+
