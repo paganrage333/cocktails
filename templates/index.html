@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocktail Search</title>
+</head>
+<body>
+    <h1>Cocktail Search</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.flavor_preference.label }}
+            {{ form.flavor_preference(size=40) }}
+        </div>
+        <div>
+            {{ form.liquor_preference.label }}
+            {{ form.liquor_preference() }}
+        </div>
+        <div>
+            {{ form.dietary_restrictions.label }}
+            {{ form.dietary_restrictions() }}
+        </div>
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+</body>
+</html>

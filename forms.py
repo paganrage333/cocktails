@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField
+from wtforms import StringField, PasswordField, TextAreaField, SelectField, SelectMultipleField, SubmitField
 from wtforms.validators import DataRequired, Email, Length
 
 class UserAddForm(FlaskForm):
@@ -26,3 +26,10 @@ class LoginForm(FlaskForm):
 
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Length(min=6)])
+
+
+class CocktailForm(FlaskForm):
+    flavor_preference = StringField('Flavor Preference')
+    liquor_preference = SelectField('Liquor Preference', choices=[('gin', 'Gin'), ('vodka', 'Vodka'), ('rum', 'Rum'), ('whiskey', 'Whiskey')])
+    dietary_restrictions = SelectMultipleField('Dietary Restrictions', choices=[('vegan', 'Vegan'), ('gluten_free', 'Gluten-Free')])
+    submit = SubmitField('Search Cocktails')

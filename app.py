@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, request, g, flash
 from models import connect_db, db, get_cocktail_data, User
 from sqlalchemy.exc import IntegrityError
-from forms import UserAddForm, UserEditForm, LoginForm
+from forms import UserAddForm, UserEditForm, LoginForm, CocktailForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -105,3 +105,26 @@ def logout():
     return redirect("/login")
 
 
+######## HOMEPAGE ########
+
+@app.route("/", methods=["GET", "POST"])
+def homepage():
+    form = CocktailForm()
+
+    if request.method == "POST":
+        # Get user input from the form
+        flavor_preference = request.form.get("flavor_preference")
+        liquor_preference = request.form.get("liquor_preference")
+        dietary_restrictions = request.form.getlist("dietary_restrictions")
+
+         # Call the function to get cocktail data
+        cocktail_data = get_cocktail_data(flavor_preference, liquor_preference, dietary_restrictions)
+        
+        if cocktail_data:
+            # Render the template with the cocktail data
+            return render_template("results.html", cocktails=cocktail_data["drinks"])
+        else:
+            # Handle API request error
+            return "Error fetching cocktail data from API"
+        
+    return render_template("index.html", form=form)
