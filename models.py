@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask import requests
+import requests
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
