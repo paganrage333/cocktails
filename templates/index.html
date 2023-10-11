@@ -7,6 +7,14 @@
     <title>Drink of the Day!</title>
 </head>
 <body>
+    <nav>
+        {% if not g.user %}
+        <a href="/signup">Sign Up</a>
+        <a href="/login">Log In</a>
+        {% else %}
+        <a href="/logout">Log Out</a>
+        {% endif %}
+    </nav>
     <h1>Page's Cocktail Extravaganza</h1>
     <h2>Drink of the Day:</h2>
 <div id="drink-container">
