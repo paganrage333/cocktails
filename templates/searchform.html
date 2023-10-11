@@ -7,6 +7,14 @@
     <title>Cocktail Search</title>
 </head>
 <body>
+    <nav>
+        {% if not g.user %}
+        <a href="/signup">Sign Up</a>
+        <a href="/login">Log In</a>
+        {% else %}
+        <a href="/logout">Log Out</a>
+        {% endif %}
+    </nav>
     <h1>Cocktail Search</h1>
     <form method="POST" action="/search">
         {{ form.hidden_tag() }}

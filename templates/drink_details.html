@@ -8,6 +8,14 @@
     <title>{{ strDrink }}</title>
 </head>
 <body>
+    <nav>
+        {% if not g.user %}
+        <a href="/signup">Sign Up</a>
+        <a href="/login">Log In</a>
+        {% else %}
+        <a href="/logout">Log Out</a>
+        {% endif %}
+    </nav>
     <h1>{{ drink.strDrink }}</h1>
 <img class="thumb" src="{{ drink.strDrinkThumb }}">
 <p>Category: {{ drink.strCategory }}</p>
