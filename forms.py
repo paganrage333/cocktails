@@ -29,7 +29,5 @@ class LoginForm(FlaskForm):
 
 
 class CocktailForm(FlaskForm):
-    flavor_preference = StringField('Flavor Preference')
     liquor_preference = SelectField('Liquor Preference', choices=[('gin', 'Gin'), ('vodka', 'Vodka'), ('rum', 'Rum'), ('whiskey', 'Whiskey')])
-    dietary_restrictions = SelectMultipleField('Dietary Restrictions', choices=[('vegan', 'Vegan'), ('gluten_free', 'Gluten-Free')])
     submit = SubmitField('Search Cocktails')

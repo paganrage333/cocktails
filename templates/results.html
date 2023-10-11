@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/app.css">
     <title>Search Results</title>
 </head>
 <body>
@@ -12,14 +13,30 @@
     {% if cocktails %}
         <ul>
             {% for cocktail in cocktails %}
-                <li>
-                    <strong>{{ cocktail.strDrink }}</strong>
-                    <p>Category: {{ cocktail.strCategory }}</p>
-                    <p>Ingredients: {{ cocktail.strIngredient1 }}, {{ cocktail.strIngredient2 }}, ...</p>
-                    <p>Instructions: {{ cocktail.strInstructions }}</p>
-                </li>
-            {% endfor %}
+    <li>
+        <strong>{{ cocktail.strDrink }}</strong>
+        <img class="thumb" src="{{ cocktail.strDrinkThumb }}">
+        <p>Category: {{ cocktail.strCategory }}</p>
+        <p>Ingredients:
+            <ul>
+                {% for i in range(1, 16) %}
+                    {% with ingredient = cocktail['strIngredient' ~ i] %}
+                        {% with measure = cocktail['strMeasure' ~ i] %}
+                            {% if ingredient %}
+                                <li>{{ measure }}{{ ingredient }}</li>
+                            {% endif %}
+                        {% endwith %}
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        </p>
+        <p>Instructions: {{ cocktail.strInstructions }}</p>
+    </li>
+{% endfor %}
+
         </ul>
+        
+
     {% else %}
         <p>No cocktails found matching your criteria.</p>
     {% endif %}

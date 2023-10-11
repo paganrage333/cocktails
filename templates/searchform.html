@@ -8,19 +8,11 @@
 </head>
 <body>
     <h1>Cocktail Search</h1>
-    <form method="POST">
+    <form method="POST" action="/search">
         {{ form.hidden_tag() }}
-        <div>
-            {{ form.flavor_preference.label }}
-            {{ form.flavor_preference(size=40) }}
-        </div>
         <div>
             {{ form.liquor_preference.label }}
             {{ form.liquor_preference() }}
-        </div>
-        <div>
-            {{ form.dietary_restrictions.label }}
-            {{ form.dietary_restrictions() }}
         </div>
         <div>
             {{ form.submit() }}

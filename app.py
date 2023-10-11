@@ -125,14 +125,12 @@ def homepage():
 def search_form():
     form = CocktailForm()
 
-    if request.method == "POST":
-        # Get user input from the form
-        flavor_preference = request.form.get("flavor_preference")
-        liquor_preference = request.form.get("liquor_preference")
-        dietary_restrictions = request.form.getlist("dietary_restrictions")
+    if form.validate_on_submit():
+        # Flask-WTF has validated the form, and you can access the form data using form.field_name.data
+        liquor_preference = form.liquor_preference.data
 
          # Call the function to get cocktail data
-        cocktail_data = get_cocktail_data(flavor_preference, liquor_preference, dietary_restrictions)
+        cocktail_data = get_cocktail_data(liquor_preference)
         
         if cocktail_data:
             # Render the template with the cocktail data
