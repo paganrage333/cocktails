@@ -7,17 +7,18 @@
     <title>Drink of the Day!</title>
 </head>
 <body>
-    <h1>Drink of the Day!</h1>
-    <div id="drink-container">
-        <h2 id="drink-name">{{ drink.strDrink }}</h2>
-        <p><strong>Category:</strong> {{ drink.strCategory }}</p>
-        <p><strong>Ingredients:</strong> {{ drink.strIngredient1 }}, {{ drink.strIngredient2 }}, ...</p>
-        <p><strong>Instructions:</strong> {{ drink.strInstructions }}</p>
-    </div>
-    
-    <button id="refresh-button">Get Another Random Drink</button>
+    <h1>Page's Cocktail Extravaganza</h1>
+    <h2>Drink of the Day:</h2>
+<div id="drink-container">
+    <h2 id="drink-name"></h2>
+    <p id="drink-category"><strong>Category:</strong></p>
+    <p id="drink-ingredients"><strong>Ingredients:</strong></p>
+    <p id="drink-instructions"><strong>Instructions:</strong></p>
+</div>
 
-    <a href="/search">Search for a Drink!</a>
+<button id="refresh-button">Get Another Random Drink</button>
+<a href="/search">Search for a Drink!</a>
+
     
     <script>
         // JavaScript to load a random drink when the page loads
@@ -28,9 +29,10 @@
                     const drink = data.drinks[0];
                     if (drink) {
                         document.getElementById("drink-name").textContent = drink.strDrink;
-                        document.getElementById("drink-category").textContent = drink.strCategory;
-                        document.getElementById("drink-ingredients").textContent = `${drink.strIngredient1}, ${drink.strIngredient2}, ...`;
-                        document.getElementById("drink-instructions").textContent = drink.strInstructions;
+                        document.getElementById("drink-category").textContent = `Category: ${drink.strCategory}`;
+                        const ingredients = `${drink.strIngredient1}, ${drink.strIngredient2}, ...`;
+                        document.getElementById("drink-ingredients").textContent = `Ingredients: ${ingredients}`;
+                        document.getElementById("drink-instructions").textContent = `Instructions: ${drink.strInstructions}`;
                     } else {
                         // Handle the case where no drink data is available
                         document.getElementById("drink-name").textContent = "No drink data available.";
@@ -50,6 +52,7 @@
         // JavaScript to load another random drink when the button is clicked
         document.getElementById("refresh-button").addEventListener("click", loadRandomDrink);
     </script>
+    
     
 </body>
 </html>

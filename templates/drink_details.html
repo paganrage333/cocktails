@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/app.css">
+    <title>{{ strDrink }}</title>
+</head>
+<body>
+    <h1>{{ drink.strDrink }}</h1>
+<img class="thumb" src="{{ drink.strDrinkThumb }}">
+<p>Category: {{ drink.strCategory }}</p>
+<p>Ingredients:</p>
+<ul>
+    {% for i in range(1, 16) %}
+        {% with ingredient = drink['strIngredient' ~ i] %}
+            {% with measure = drink['strMeasure' ~ i] %}
+                {% if ingredient %}
+                    <li>{{ measure }}{{ ingredient }}</li>
+                {% endif %}
+            {% endwith %}
+        {% endwith %}
+    {% endfor %}
+</ul>
+<p>Instructions: {{ drink.strInstructions }}</p>
+
+<a href="/">Return Home</a>
+</body>
+</html>

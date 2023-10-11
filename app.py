@@ -154,4 +154,18 @@ def results():
         return render_template("results.html", cocktails=cocktail_data["drinks"])
     else:
         return "Error fetching cocktail data from API"
+    
+
+@app.route("/drink/<string:drink_id>")
+def drink_details(drink_id):
+    api_url = f"https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i={drink_id}"
+
+    response = requests.get(api_url)
+    data = response.json()
+
+    if "drinks" in data:
+            drink = data["drinks"][0]  # Assuming the API returns details for a single drink
+            return render_template('drink_details.html', drink=drink)
+
+    
 

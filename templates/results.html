@@ -14,7 +14,7 @@
         <ul>
             {% for cocktail in cocktails %}
     <li>
-        <strong>{{ cocktail.strDrink }}</strong>
+        <strong><a href="{{ url_for('drink_details', drink_id=cocktail.idDrink) }}">{{ cocktail.strDrink }}</a></strong>
         <img class="thumb" src="{{ cocktail.strDrinkThumb }}">
         <p>Category: {{ cocktail.strCategory }}</p>
         <p>Ingredients:
