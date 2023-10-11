@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, session, request, g, flash
 from models import connect_db, db, get_cocktail_data, User
 from sqlalchemy.exc import IntegrityError
+import requests
 from forms import UserAddForm, UserEditForm, LoginForm, CocktailForm
 
 CURR_USER_KEY = "curr_user"
@@ -109,7 +110,15 @@ def logout():
 
 @app.route("/", methods=["GET", "POST"])
 def homepage():
-    return render_template("index.html")
+    response = requests.get("https://www.thecocktaildb.com/api/json/v1/1/random.php")
+
+    if response.status_code == 200:
+        data = response.json()
+        drink = data['drinks'][0]  # Get the first drink from the response
+    else:
+        drink = None
+
+    return render_template("index.html", drink=drink)
     
 
 @app.route("/search", methods=["GET", "POST"])

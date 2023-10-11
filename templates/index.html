@@ -24,18 +24,30 @@
                 .then(response => response.json())
                 .then(data => {
                     const drink = data.drinks[0];
-                    document.getElementById("drink-name").textContent = drink.strDrink;
-                    document.getElementById("drink-category").textContent = drink.strCategory;
-                    document.getElementById("drink-ingredients").textContent = drink.strIngredient1 + ', ' + drink.strIngredient2;
-                    document.getElementById("drink-instructions").textContent = drink.strInstructions;
+                    if (drink) {
+                        document.getElementById("drink-name").textContent = drink.strDrink;
+                        document.getElementById("drink-category").textContent = drink.strCategory;
+                        document.getElementById("drink-ingredients").textContent = `${drink.strIngredient1}, ${drink.strIngredient2}, ...`;
+                        document.getElementById("drink-instructions").textContent = drink.strInstructions;
+                    } else {
+                        // Handle the case where no drink data is available
+                        document.getElementById("drink-name").textContent = "No drink data available.";
+                        document.getElementById("drink-category").textContent = "";
+                        document.getElementById("drink-ingredients").textContent = "";
+                        document.getElementById("drink-instructions").textContent = "";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching random drink:", error);
                 });
         }
-        
+    
         // Load a random drink when the page loads
         loadRandomDrink();
-        
+    
         // JavaScript to load another random drink when the button is clicked
         document.getElementById("refresh-button").addEventListener("click", loadRandomDrink);
     </script>
+    
 </body>
 </html>
