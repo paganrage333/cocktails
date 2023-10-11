@@ -109,6 +109,11 @@ def logout():
 
 @app.route("/", methods=["GET", "POST"])
 def homepage():
+    return render_template("index.html")
+    
+
+@app.route("/search", methods=["GET", "POST"])
+def search_form():
     form = CocktailForm()
 
     if request.method == "POST":
@@ -127,7 +132,7 @@ def homepage():
             # Handle API request error
             return "Error fetching cocktail data from API"
         
-    return render_template("index.html", form=form)
+    return render_template("searchform.html", form=form)
 
 @app.route("/results", methods=["GET"])
 def results():

@@ -4,27 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cocktail Search</title>
+    <title>Drink of the Day!</title>
 </head>
 <body>
-    <h1>Cocktail Search</h1>
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        <div>
-            {{ form.flavor_preference.label }}
-            {{ form.flavor_preference(size=40) }}
-        </div>
-        <div>
-            {{ form.liquor_preference.label }}
-            {{ form.liquor_preference() }}
-        </div>
-        <div>
-            {{ form.dietary_restrictions.label }}
-            {{ form.dietary_restrictions() }}
-        </div>
-        <div>
-            {{ form.submit() }}
-        </div>
-    </form>
+    <h1>Drink of the Day!</h1>
+    <div id="drink-container">
+        <h2 id="drink-name">{{ drink.strDrink }}</h2>
+        <p><strong>Category:</strong> {{ drink.strCategory }}</p>
+        <p><strong>Ingredients:</strong> {{ drink.strIngredient1 }}, {{ drink.strIngredient2 }}, ...</p>
+        <p><strong>Instructions:</strong> {{ drink.strInstructions }}</p>
+    </div>
+    
+    <button id="refresh-button">Get Another Random Drink</button>
+    
+    <script>
+        // JavaScript to load a random drink when the page loads
+        function loadRandomDrink() {
+            fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php")
+                .then(response => response.json())
+                .then(data => {
+                    const drink = data.drinks[0];
+                    document.getElementById("drink-name").textContent = drink.strDrink;
+                    document.getElementById("drink-category").textContent = drink.strCategory;
+                    document.getElementById("drink-ingredients").textContent = drink.strIngredient1 + ', ' + drink.strIngredient2;
+                    document.getElementById("drink-instructions").textContent = drink.strInstructions;
+                });
+        }
+        
+        // Load a random drink when the page loads
+        loadRandomDrink();
+        
+        // JavaScript to load another random drink when the button is clicked
+        document.getElementById("refresh-button").addEventListener("click", loadRandomDrink);
+    </script>
 </body>
 </html>
