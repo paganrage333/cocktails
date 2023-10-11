@@ -126,29 +126,29 @@ def search_form():
     form = CocktailForm()
 
     if form.validate_on_submit():
-        # Flask-WTF has validated the form, and you can access the form data using form.field_name.data
         liquor_preference = form.liquor_preference.data
 
-         # Call the function to get cocktail data
-        cocktail_data = get_cocktail_data(liquor_preference)
+        if liquor_preference:
+            # Search by liquor preference
+            cocktail_data = get_cocktail_data(liquor_preference)
+        
+        else:
+            # Handle invalid form data
+            return "Invalid form data"
         
         if cocktail_data:
-            # Render the template with the cocktail data
             return render_template("results.html", cocktails=cocktail_data["drinks"])
         else:
-            # Handle API request error
             return "Error fetching cocktail data from API"
         
     return render_template("searchform.html", form=form)
 
 @app.route("/results", methods=["GET"])
 def results():
-    # Fetch the cocktail data (you may need to modify this logic)
-    flavor_preference = request.args.get("flavor_preference")
+    # Fetch the cocktail data
     liquor_preference = request.args.get("liquor_preference")
-    dietary_restrictions = request.args.getlist("dietary_restrictions")
     
-    cocktail_data = get_cocktail_data(flavor_preference, liquor_preference, dietary_restrictions)
+    cocktail_data = get_cocktail_data(liquor_preference)
     
     if cocktail_data:
         return render_template("results.html", cocktails=cocktail_data["drinks"])
