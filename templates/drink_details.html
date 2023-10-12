@@ -9,6 +9,7 @@
 </head>
 <body>
     <nav>
+        <a href="/">HOME</a>
         {% if not g.user %}
         <a href="/signup">Sign Up</a>
         <a href="/login">Log In</a>
@@ -36,7 +37,7 @@
     <button class="
       btn 
       btn-sm 
-      {{'btn-primary' if msg.id in likes else 'btn-secondary'}}"
+      {{'btn-primary' if drink.id in likes else 'btn-secondary'}}"
     >
       <i class="fa fa-thumbs-up"></i> 
     </button>

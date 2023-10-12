@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect, session, request, g, flash
-from models import connect_db, db, get_cocktail_data, User
+from flask import Flask, render_template, redirect, session, request, g, flash, abort
+from models import connect_db, db, get_cocktail_data, User, Cocktail, Likes
 from sqlalchemy.exc import IntegrityError
 import requests
 from forms import UserAddForm, UserEditForm, LoginForm, CocktailForm
@@ -104,6 +104,72 @@ def logout():
 
     flash("You have successfully logged out.", 'success')
     return redirect("/login")
+
+######## USER ROUTES #########
+@app.route('/users/<int:user_id>')
+def users_show(user_id):
+    """Show user profile."""
+
+    user = User.query.get_or_404(user_id)
+    likes = [drink.id for drink in user.likes]
+    return render_template('users/show.html', user=user, likes=likes)
+
+@app.route('/users/<int:user_id>/likes', methods=["GET"])
+def show_likes(user_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = User.query.get_or_404(user_id)
+    return render_template('users/likes.html', user=user, likes=user.likes)
+
+@app.route('/drinks/<int:drink_id>/like', methods=['POST'])
+def add_like(drink_id):
+    """Toggle a liked message for the currently-logged-in user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    liked_drink = Cocktail.query.get_or_404(drink_id)
+    if liked_drink.user_id == g.user.id:
+        return abort(403)
+
+    user_likes = g.user.likes
+
+    if liked_drink in user_likes:
+        g.user.likes = [like for like in user_likes if like != liked_drink]
+    else:
+        g.user.likes.append(liked_drink)
+
+    db.session.commit()
+
+    return redirect("/")
+
+@app.route('/users/add_like/<int:drink_id>', methods=['POST'])
+def user_add_like(drink_id):
+    """Toggle a liked drink for the currently-logged-in user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    liked_drink = Cocktail.query.get_or_404(drink_id)  # Replace with your actual data model
+    if liked_drink.user_id == g.user.id:
+        return abort(403)
+
+    user_likes = g.user.likes
+
+    if liked_drink in user_likes:
+        # User already liked this drink, so unlike it
+        g.user.likes = [like for like in user_likes if like != liked_drink]
+    else:
+        # User hasn't liked this drink, so add it to their likes
+        g.user.likes.append(liked_drink)
+
+    db.session.commit()
+
+    return redirect("/")  # Redirect to the appropriate page after liking/unliking
 
 
 ######## HOMEPAGE ########

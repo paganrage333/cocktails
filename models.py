@@ -38,8 +38,8 @@ class Cocktail(db.Model):
 
     __tablename__ = 'cocktails'
 
-    idDrink = db.Column(
-        db.Text,
+    id = db.Column(
+        db.String,
         primary_key=True
     )
 
@@ -166,7 +166,7 @@ class Likes(db.Model):
     )
 
     drink_id = db.Column(
-        db.Integer,
-        db.ForeignKey('drinks.id', ondelete='cascade'),
+        db.String,
+        db.ForeignKey('cocktails.id', ondelete='cascade'),
         unique=True
     )
