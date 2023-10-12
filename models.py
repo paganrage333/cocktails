@@ -33,6 +33,31 @@ def get_cocktail_data(liquor_preference):
         print(f"JSON Decoding Error: {e}")
         return None
 
+class Cocktail(db.Model):
+    """Cocktail data model."""
+
+    __tablename__ = 'cocktails'
+
+    idDrink = db.Column(
+        db.Text,
+        primary_key=True
+    )
+
+    strDrink = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    strCategory = db.Column(
+        db.Text
+    )
+
+    strInstructions = db.Column(
+        db.Text
+    )
+
+    def __repr__(self):
+        return f"<Cocktail {self.strDrink}>"
     
 
 class User(db.Model):
@@ -64,7 +89,7 @@ class User(db.Model):
 
     header_image_url = db.Column(
         db.Text,
-        default="/static/images/warbler-hero.jpg"
+        default="/static/images/REPLACE"
     )
 
     bio = db.Column(
@@ -80,41 +105,13 @@ class User(db.Model):
         nullable=False,
     )
 
-    # messages = db.relationship('Message')
-
-    # followers = db.relationship(
-    #     "User",
-    #     secondary="follows",
-    #     primaryjoin=(Follows.user_being_followed_id == id),
-    #     secondaryjoin=(Follows.user_following_id == id)
-    # )
-
-    # following = db.relationship(
-    #     "User",
-    #     secondary="follows",
-    #     primaryjoin=(Follows.user_following_id == id),
-    #     secondaryjoin=(Follows.user_being_followed_id == id)
-    
-
-    # likes = db.relationship(
-    #     'Message',
-    #     secondary="likes"
-    # )
+    likes = db.relationship(
+        'Cocktail',
+        secondary="likes"
+    )
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
-
-    # def is_followed_by(self, other_user):
-    #     """Is this user followed by `other_user`?"""
-
-    #     found_user_list = [user for user in self.followers if user == other_user]
-    #     return len(found_user_list) == 1
-
-    # def is_following(self, other_user):
-    #     """Is this user following `other_use`?"""
-
-    #     found_user_list = [user for user in self.following if user == other_user]
-    #     return len(found_user_list) == 1
 
     @classmethod
     def signup(cls, username, email, password, image_url):
@@ -138,11 +135,8 @@ class User(db.Model):
     @classmethod
     def authenticate(cls, username, password):
         """Find user with `username` and `password`.
-
-        This is a class method (call it on the class, not an individual user.)
-        It searches for a user whose password hash matches this password
+        searches for a user whose password hash matches this password
         and, if it finds such a user, returns that user object.
-
         If can't find matching user (or if password is wrong), returns False.
         """
 
@@ -156,3 +150,23 @@ class User(db.Model):
         return False
     
     
+class Likes(db.Model):
+    """Mapping user likes to warbles."""
+
+    __tablename__ = 'likes' 
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='cascade')
+    )
+
+    drink_id = db.Column(
+        db.Integer,
+        db.ForeignKey('drinks.id', ondelete='cascade'),
+        unique=True
+    )

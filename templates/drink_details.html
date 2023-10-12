@@ -32,7 +32,15 @@
     {% endfor %}
 </ul>
 <p>Instructions: {{ drink.strInstructions }}</p>
-
+<form method="POST" action="/users/add_like/{{ drink.id }}" id="drink-likes-form">
+    <button class="
+      btn 
+      btn-sm 
+      {{'btn-primary' if msg.id in likes else 'btn-secondary'}}"
+    >
+      <i class="fa fa-thumbs-up"></i> 
+    </button>
+  </form>
 <a href="/">Return Home</a>
 </body>
 </html>
