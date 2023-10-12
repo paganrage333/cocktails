@@ -56,6 +56,10 @@ class Cocktail(db.Model):
         db.Text
     )
 
+    likes = db.relationship('Likes', back_populates='cocktail')
+
+    liked_by_users = db.relationship('User', secondary='likes', back_populates='liked_cocktails', overlaps="likes")
+
     def __repr__(self):
         return f"<Cocktail {self.strDrink}>"
     
@@ -106,9 +110,12 @@ class User(db.Model):
     )
 
     likes = db.relationship(
-        'Cocktail',
-        secondary="likes"
+        'Likes',
+        back_populates='user',
+        overlaps="liked_by_users"
     )
+
+    liked_cocktails = db.relationship('Cocktail', secondary='likes', back_populates='liked_by_users', overlaps="likes")
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -165,8 +172,10 @@ class Likes(db.Model):
         db.ForeignKey('users.id', ondelete='cascade')
     )
 
-    drink_id = db.Column(
+    cocktail_id = db.Column(
         db.String,
         db.ForeignKey('cocktails.id', ondelete='cascade'),
-        unique=True
     )
+
+    user = db.relationship('User', back_populates='likes', overlaps="liked_by_users,liked_cocktails")
+    cocktail = db.relationship('Cocktail', back_populates='likes', overlaps="liked_by_users,liked_cocktails")

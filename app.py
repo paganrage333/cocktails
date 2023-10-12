@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, session, request, g, flash, abort
+from flask import Flask, render_template, redirect, session, request, g, flash, abort, url_for
 from models import connect_db, db, get_cocktail_data, User, Cocktail, Likes
 from sqlalchemy.exc import IntegrityError
 import requests
@@ -130,10 +130,16 @@ def add_like(drink_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
+    
+    # Debug: Print drink_id to check its value
+    print("drink_id:", drink_id)
 
     liked_drink = Cocktail.query.get_or_404(drink_id)
-    if liked_drink.user_id == g.user.id:
-        return abort(403)
+
+    # Debug: Print liked_drink details to check if it exists
+    print("liked_drink:", liked_drink)
+
+    liked_drink = Cocktail.query.get_or_404(drink_id)
 
     user_likes = g.user.likes
 
@@ -149,14 +155,20 @@ def add_like(drink_id):
 @app.route('/users/add_like/<int:drink_id>', methods=['POST'])
 def user_add_like(drink_id):
     """Toggle a liked drink for the currently-logged-in user."""
-
+    
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
+    
+    # Debug: Print drink_id to check its value
+    print("drink_id:", drink_id)
+
+    liked_drink = Cocktail.query.get_or_404(drink_id)
+
+    # Debug: Print liked_drink details to check if it exists
+    print("liked_drink:", liked_drink)
 
     liked_drink = Cocktail.query.get_or_404(drink_id)  # Replace with your actual data model
-    if liked_drink.user_id == g.user.id:
-        return abort(403)
 
     user_likes = g.user.likes
 
@@ -226,12 +238,24 @@ def results():
 def drink_details(drink_id):
     api_url = f"https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i={drink_id}"
 
-    response = requests.get(api_url)
-    data = response.json()
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()  # Check for request errors
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        # Handle request errors, e.g., network issues or API problems
+        return render_template('error.html', message=f"Error: {str(e)}")
+    except requests.exceptions.JSONDecodeError as e:
+        # Handle JSON decoding errors (e.g., empty response)
+        return render_template('error.html', message="Error decoding API response")
 
     if "drinks" in data:
-            drink = data["drinks"][0]  # Assuming the API returns details for a single drink
-            return render_template('drink_details.html', drink=drink)
+        drink = data["drinks"][0]  # Assuming the API returns details for a single drink
+        return render_template('drink_details.html', drink=drink, drink_id=drink_id)
+    else:
+        return render_template('error.html', message="No data available for this drink")
+
+
 
     
 
