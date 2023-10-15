@@ -152,7 +152,7 @@ def add_like(drink_id):
 
     return redirect("/")
 
-@app.route('/users/add_like/<int:drink_id>', methods=['POST'])
+@app.route('/users/add_like/<drink_id>', methods=['POST'])
 def user_add_like(drink_id):
     """Toggle a liked drink for the currently-logged-in user."""
     
@@ -163,13 +163,18 @@ def user_add_like(drink_id):
     # Debug: Print drink_id to check its value
     print("drink_id:", drink_id)
 
-    liked_drink = Cocktail.query.get_or_404(drink_id)
+    print("id type", type(drink_id)) #print id type
+    
 
-    # Debug: Print liked_drink details to check if it exists
-    print("liked_drink:", liked_drink)
+    # # Debug: Print liked_drink details to check if it exists
+    # print("liked_drink:", liked_drink)
 
-    liked_drink = Cocktail.query.get_or_404(drink_id)  
+    try:
+        liked_drink = Cocktail.query.get_or_404(drink_id)  
 
+    except Exception as e:
+        print("######", e)
+    
     user_likes = g.user.likes
 
     if liked_drink in user_likes:
