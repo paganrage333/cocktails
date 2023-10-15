@@ -168,7 +168,7 @@ def user_add_like(drink_id):
     # Debug: Print liked_drink details to check if it exists
     print("liked_drink:", liked_drink)
 
-    liked_drink = Cocktail.query.get_or_404(drink_id)  # Replace with your actual data model
+    liked_drink = Cocktail.query.get_or_404(drink_id)  
 
     user_likes = g.user.likes
 
