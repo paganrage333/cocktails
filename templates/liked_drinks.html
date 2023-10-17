@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/app.css">
+    <title>Liked Drinks</title>
+</head>
+<body>
+    <nav>
+        <a href="/">HOME</a>
+        {% if not g.user %}
+        <a href="/signup">Sign Up</a>
+        <a href="/login">Log In</a>
+        {% else %}
+        <a href="/logout">Log Out</a>
+        {% endif %}
+    </nav>
+    <h1>Liked Drinks</h1>
+    
+    {% if liked_drinks %}
+        <ul>
+            {% for drink in liked_drinks %}
+                <li>
+                    <h2>{{ drink.strDrink }}</h2>
+                    <img class="thumb" src="{{ drink.strDrinkThumb }}">
+                    <p>Category: {{ drink.strCategory }}</p>
+                    <p>Ingredients:</p>
+                    <ul>
+                        {% for i in range(1, 16) %}
+                            {% with ingredient = drink['strIngredient' ~ i] %}
+                                {% with measure = drink['strMeasure' ~ i] %}
+                                    {% if ingredient %}
+                                        <li>{{ measure }}{{ ingredient }}</li>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endwith %}
+                        {% endfor %}
+                    </ul>
+                    <p>Instructions: {{ drink.strInstructions }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No liked drinks available.</p>
+    {% endif}
+    
+    <a href="/">Return Home</a>
+</body>
+</html>

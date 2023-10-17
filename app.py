@@ -123,9 +123,9 @@ def show_likes(user_id):
     user = User.query.get_or_404(user_id)
     return render_template('users/likes.html', user=user, likes=user.likes)
 
-@app.route('/drinks/<int:drink_id>/like', methods=['POST'])
+@app.route('/drinks/<string:drink_id>/like', methods=['POST'])
 def add_like(drink_id):
-    """Toggle a liked message for the currently-logged-in user."""
+    """Toggle a liked drink for the currently-logged-in user."""
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -152,7 +152,7 @@ def add_like(drink_id):
 
     return redirect("/")
 
-@app.route('/users/add_like/<drink_id>', methods=['POST'])
+@app.route('/users/add_like/<string:drink_id>', methods=['POST'])
 def user_add_like(drink_id):
     """Toggle a liked drink for the currently-logged-in user."""
     
@@ -188,6 +188,22 @@ def user_add_like(drink_id):
 
     return redirect("/")  # Redirect to the appropriate page after liking/unliking
 
+@app.route('/users/add_like/', methods=['POST'])
+def please_god():
+    return redirect("/")
+
+@app.route('/liked_drinks', methods=['GET'])
+def liked_drinks():
+    """Display liked drinks for the currently logged-in user."""
+    
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    # Fetch the liked drinks for the user
+    liked_drinks = g.user.liked_cocktails
+
+    return render_template("liked_drinks.html", liked_drinks=liked_drinks)
 
 ######## HOMEPAGE ########
 
