@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, session, request, g, flash, abort, url_for
-from models import connect_db, db, get_cocktail_data, User, Cocktail, Likes
+from models import connect_db, db, get_cocktail_data, User, Cocktail
 from sqlalchemy.exc import IntegrityError
 import requests
 from forms import UserAddForm, UserEditForm, LoginForm, CocktailForm
@@ -194,7 +194,7 @@ def please_god():
 @app.route('/liked_drinks', methods=['GET'])
 def liked_drinks():
     """Display liked drinks for the currently logged-in user."""
-    
+
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
