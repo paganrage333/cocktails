@@ -12,7 +12,6 @@ app.config['SECRET_KEY'] = 'colada'
 app.app_context().push()
 
 connect_db(app)
-db.create_all()
 
 ############# SIGN UP / LOGIN / LOGOUT ROUTES ############
 

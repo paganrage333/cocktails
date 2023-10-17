@@ -5,9 +5,6 @@ import requests
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
-def connect_db(app):
-    db.app = app
-    db.init_app(app)
 
 def get_cocktail_data(liquor_preference):
     base_url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php"
@@ -32,6 +29,7 @@ def get_cocktail_data(liquor_preference):
     except ValueError as e:
         print(f"JSON Decoding Error: {e}")
         return None
+
 
 class Cocktail(db.Model):
     """Cocktail data model."""
@@ -179,3 +177,7 @@ class Likes(db.Model):
 
     user = db.relationship('User', back_populates='likes', overlaps="liked_by_users,liked_cocktails")
     cocktail = db.relationship('Cocktail', back_populates='likes', overlaps="liked_by_users,liked_cocktails")
+
+def connect_db(app):
+    db.app = app
+    db.init_app(app)
