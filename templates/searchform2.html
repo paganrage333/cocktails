@@ -18,12 +18,12 @@
         <a href="/liked_drinks">My Drinks</a>
         {% endif %}
     </nav>
-    <h1>Cocktail Search by Liquor</h1>
-    <form method="POST" action="/search">
+    <h1>Cocktail Search by Ingredient</h1>
+    <form method="POST" action="/othersearch">
         {{ form.hidden_tag() }}
         <div>
-            {{ form.liquor_preference.label }}
-            {{ form.liquor_preference() }}
+            {{ form.ingredient.label }}
+            {{ form.ingredient() }}
         </div>
         <div>
             {{ form.submit() }}

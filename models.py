@@ -30,6 +30,29 @@ def get_cocktail_data(liquor_preference):
         print(f"JSON Decoding Error: {e}")
         return None
 
+def get_ingredient_data(ingredient):
+    base_url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php"
+
+    params = {
+        "i": ingredient
+    }
+
+    print("API Request URL:", base_url)
+    print("API Request Parameters:", params)
+
+    try:
+        response = requests.get(base_url, params=params)
+        response.raise_for_status()
+
+        data = response.json()
+        print("API Response:", data)
+        return data
+    except requests.exceptions.RequestException as e:
+        print(f"Request Error: {e}")
+        return None
+    except ValueError as e:
+        print(f"JSON Decoding Error: {e}")
+        return None
 
 class Cocktail(db.Model):
     """Cocktail data model."""

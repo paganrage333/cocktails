@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, session, request, g, flash, abort, url_for
-from models import connect_db, db, get_cocktail_data, User, Cocktail
+from models import connect_db, db, get_cocktail_data, User, Cocktail, get_ingredient_data
 from sqlalchemy.exc import IntegrityError
 import requests
 from forms import UserAddForm, UserEditForm, LoginForm, CocktailForm
@@ -240,6 +240,29 @@ def search_form():
             return "Error fetching cocktail data from API"
         
     return render_template("searchform.html", form=form)
+
+@app.route("/othersearch", methods=["GET", "POST"])
+def ingredient_search():
+    form = CocktailForm()
+
+    if form.validate_on_submit():
+        print("Form validated")
+        ingredient = form.ingredient.data
+
+        if ingredient:
+            # Search by ingredient
+            cocktail_data = get_ingredient_data(ingredient)
+        
+        else:
+            # Handle invalid form data
+            return "Invalid form data"
+        
+        if cocktail_data:
+            return render_template("results.html", cocktails=cocktail_data["drinks"])
+        else:
+            return "Error fetching cocktail data from API"
+        
+    return render_template("searchform2.html", form=form)
 
 @app.route("/results", methods=["GET"])
 def results():
