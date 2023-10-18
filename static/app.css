@@ -27,6 +27,13 @@ h1 {
     color: rgb(242, 72, 86);
 }
 
+.search {
+    /* outline: 1px solid black; */
+    color:rgb(242, 72, 86);
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 /* LINK STYLES */
 
 a:visited {

@@ -189,7 +189,7 @@ def user_add_like(drink_id):
 
 @app.route('/users/add_like/', methods=['POST'])
 def please_god():
-    return redirect("/")
+    return redirect("/search")
 
 @app.route('/liked_drinks', methods=['GET'])
 def liked_drinks():
@@ -245,22 +245,13 @@ def search_form():
 def ingredient_search():
     form = CocktailForm()
 
-    if form.validate_on_submit():
-        print("Form validated")
-        ingredient = form.ingredient.data
+    ingredient = form.ingredient.data
+    cocktail_data = get_ingredient_data(ingredient)
+    
+    print(cocktail_data)
 
-        if ingredient:
-            # Search by ingredient
-            cocktail_data = get_ingredient_data(ingredient)
-        
-        else:
-            # Handle invalid form data
-            return "Invalid form data"
-        
-        if cocktail_data:
+    if cocktail_data:
             return render_template("results.html", cocktails=cocktail_data["drinks"])
-        else:
-            return "Error fetching cocktail data from API"
         
     return render_template("searchform2.html", form=form)
 

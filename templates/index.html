@@ -19,6 +19,10 @@
         {% endif %}
     </nav>
     <h1>Page's Cocktail Extravaganza</h1>
+    <a href="/search" class="search">Search for a Drink by Liquor Preference!</a>
+    <div></div>
+    <p></p>
+    <a href="/othersearch" class="search">Search for a Drink by Ingredient!</a>
     <h2>Drink of the Day:</h2>
     <div id="drink-container">
         <h2 id="drink-name"><a id="drink-link" href="{{ url_for('drink_details', drink_id='') }}"></a></h2>
@@ -28,8 +32,6 @@
     </div>
 
 <button id="refresh-button">Get Another Random Drink</button>
-<a href="/search">Search for a Drink by Liquor Preference!</a>
-<a href="/othersearch">Search for a Drink by Ingredient!</a>
 
     
 <script>
