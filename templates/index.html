@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/app.css">
     <title>Drink of the Day!</title>
 </head>
-<body>
+<body class="index">
     <nav>
         <a href="/">HOME</a>
         {% if not g.user %}
@@ -18,20 +18,25 @@
         <a href="/liked_drinks">My Drinks</a>
         {% endif %}
     </nav>
-    <h1>Page's Cocktail Extravaganza</h1>
+    <h1 class="home-title">Page's Cocktail Extravaganza</h1>
+    <div class="main-content">
+    <div class="home-search">
     <a href="/search" class="search">Search for a Drink by Liquor Preference!</a>
-    <div></div>
-    <p></p>
     <a href="/othersearch" class="search">Search for a Drink by Ingredient!</a>
-    <h2>Drink of the Day:</h2>
-    <div id="drink-container">
-        <h2 id="drink-name"><a id="drink-link" href="{{ url_for('drink_details', drink_id='') }}"></a></h2>
-        <p id="drink-category"><strong>Category:</strong></p>
-        <p id="drink-ingredients"><strong>Ingredients:</strong></p>
-        <p id="drink-instructions"><strong>Instructions:</strong></p>
+    </div>  
+    <div class="drink-of-the-day">
+     <h2>Drink of the Day:</h2>
+        <div id="drink-container">
+            <h2 id="drink-name"><a id="drink-link" href="{{ url_for('drink_details', drink_id='') }}"></a></h2>
+            <p id="drink-category"><strong>Category:</strong></p>
+            <p id="drink-ingredients"><strong>Ingredients:</strong></p>
+            <p id="drink-instructions"><strong>Instructions:</strong></p>
+        </div>
+        <button id="refresh-button">Get Another Random Drink</button>
+    </div>  
     </div>
 
-<button id="refresh-button">Get Another Random Drink</button>
+
 
     
 <script>
