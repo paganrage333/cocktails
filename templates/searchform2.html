@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/static/app.css">
     <title>Cocktail Search</title>
 </head>
-<body>
+<body class="search">
     <nav>
         <a href="/">HOME</a>
         {% if not g.user %}
@@ -21,6 +21,7 @@
         {% endif %}
     </nav>
     <h1>Cocktail Search by Ingredient</h1>
+    <div class="actual-search">
     <form method="POST" action="/othersearch">
         {{ form.hidden_tag() }}
         <div>
@@ -31,5 +32,6 @@
             {{ form.submit() }}
         </div>
     </form>
+    </div>
 </body>
 </html>

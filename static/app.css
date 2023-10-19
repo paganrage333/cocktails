@@ -111,3 +111,32 @@ a:hover {
     padding: 15px;
     text-align: left;
 }
+
+/* RESULTS */
+
+.results {
+    background-image: url(/static/assets/cocktail.png);
+    background-size: 88%;
+    display: flex;
+    flex-direction: column;
+}
+
+.results .thumb {
+    align-items: center;
+}
+
+
+/* SEARCH PAGE */
+
+.search {
+    background-image: url(/static/assets/cocktail.png);
+    background-size: 88%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.actual-search {
+    padding: 50px;
+    font-size: larger;
+}

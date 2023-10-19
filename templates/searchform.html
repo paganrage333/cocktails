@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-    <link rel="stylesheet" href="/static/app.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    />
+    <link rel="stylesheet" href="/static/app.css" />
     <title>Cocktail Search</title>
-</head>
-<body>
+  </head>
+  <body class="search">
     <nav>
-        <a href="/">HOME</a>
-        {% if not g.user %}
-        <a href="/signup">Sign Up</a>
-        <a href="/login">Log In</a>
-        {% else %}
-        <a href="/logout">Log Out</a>
-        <a href="/liked_drinks">My Drinks</a>
-        {% endif %}
+      <a href="/">HOME</a>
+      {% if not g.user %}
+      <a href="/signup">Sign Up</a>
+      <a href="/login">Log In</a>
+      {% else %}
+      <a href="/logout">Log Out</a>
+      <a href="/liked_drinks">My Drinks</a>
+      {% endif %}
     </nav>
     <h1>Cocktail Search by Liquor</h1>
-    <form method="POST" action="/search">
+    <div class="actual-search">
+      <form method="POST" action="/search">
         {{ form.hidden_tag() }}
         <div>
-            {{ form.liquor_preference.label }}
-            {{ form.liquor_preference() }}
+          {{ form.liquor_preference.label }} {{ form.liquor_preference() }}
         </div>
-        <div>
-            {{ form.submit() }}
-        </div>
-    </form>
-</body>
+        <div>{{ form.submit() }}</div>
+      </form>
+    </div>
+  </body>
 </html>

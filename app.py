@@ -223,23 +223,31 @@ def homepage():
 def search_form():
     form = CocktailForm()
 
-    if form.validate_on_submit():
-        liquor_preference = form.liquor_preference.data
+    liquor_preference = form.liquor_preference.data
+    cocktail_data = get_cocktail_data(liquor_preference)
 
-        if liquor_preference:
-            # Search by liquor preference
-            cocktail_data = get_cocktail_data(liquor_preference)
-        
-        else:
-            # Handle invalid form data
-            return "Invalid form data"
-        
-        if cocktail_data:
+    if cocktail_data:
             return render_template("results.html", cocktails=cocktail_data["drinks"])
-        else:
-            return "Error fetching cocktail data from API"
-        
+    
     return render_template("searchform.html", form=form)
+
+    # if form.validate_on_submit():
+    #     liquor_preference = form.liquor_preference.data
+
+    #     if liquor_preference:
+    #         # Search by liquor preference
+    #         cocktail_data = get_cocktail_data(liquor_preference)
+        
+    #     else:
+    #         # Handle invalid form data
+    #         return "Invalid form data"
+        
+    #     if cocktail_data:
+    #         return render_template("results.html", cocktails=cocktail_data["drinks"])
+    #     else:
+    #         return "Error fetching cocktail data from API"
+        
+    # return render_template("searchform.html", form=form)
 
 @app.route("/othersearch", methods=["GET", "POST"])
 def ingredient_search():
