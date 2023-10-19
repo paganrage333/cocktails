@@ -1,98 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/app.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/app.css" />
     <title>Drink of the Day!</title>
-</head>
-<body class="index">
+  </head>
+  <body class="index">
     <nav>
-        <a href="/">HOME</a>
-        {% if not g.user %}
-        <a href="/signup">Sign Up</a>
-        <a href="/login">Log In</a>
-        {% else %}
-        <a href="/logout">Log Out</a>
-        <a href="/liked_drinks">My Drinks</a>
-        {% endif %}
+      <a href="/">HOME</a>
+      {% if not g.user %}
+      <a href="/signup">Sign Up</a>
+      <a href="/login">Log In</a>
+      {% else %}
+      <a href="/logout">Log Out</a>
+      <a href="/liked_drinks">My Drinks</a>
+      {% endif %}
     </nav>
     <h1 class="home-title">Page's Cocktail Extravaganza</h1>
     <div class="main-content">
-    <div class="home-search">
-    <a href="/search" class="search">Search for a Drink by Liquor Preference!</a>
-    <a href="/othersearch" class="search">Search for a Drink by Ingredient!</a>
-    </div>  
-    <div class="drink-of-the-day">
-     <h2>Drink of the Day:</h2>
+      <div class="home-search">
+        <a href="/search" class="search"
+          >Search for a Drink by Liquor Preference!</a
+        >
+        <a href="/othersearch" class="search"
+          >Search for a Drink by Ingredient!</a
+        >
+      </div>
+      <div class="drink-of-the-day">
+        <h2>Drink of the Day:</h2>
         <div id="drink-container">
-            <h2 id="drink-name"><a id="drink-link" href="{{ url_for('drink_details', drink_id='') }}"></a></h2>
-            <p id="drink-category"><strong>Category:</strong></p>
-            <p id="drink-ingredients"><strong>Ingredients:</strong></p>
-            <p id="drink-instructions"><strong>Instructions:</strong></p>
+          <h2 id="drink-name">
+            <a
+              id="drink-link"
+              href="{{ url_for('drink_details', drink_id='') }}"
+            ></a>
+          </h2>
+          <p id="drink-category"><strong>Category:</strong></p>
+          <p id="drink-ingredients"><strong>Ingredients:</strong></p>
+          <p id="drink-instructions"><strong>Instructions:</strong></p>
         </div>
         <button id="refresh-button">Get Another Random Drink</button>
-    </div>  
+      </div>
     </div>
 
+    <script>
+      // Store the initial drink data
+      let initialDrink;
 
-
-    
-<script>
-    // Store the initial drink data
-    let initialDrink;
-
-    function refreshWithInitialDrink() {
+      function refreshWithInitialDrink() {
         if (initialDrink) {
-            document.getElementById("drink-link").textContent = initialDrink.strDrink;
-            document.getElementById("drink-link").href = "{{ url_for('drink_details', drink_id=drink.idDrink) }}";
-            document.getElementById("drink-category").textContent = `Category: ${initialDrink.strCategory}`;
-            const ingredients = `${initialDrink.strIngredient1}, ${initialDrink.strIngredient2}, ...`;
-            document.getElementById("drink-ingredients").textContent = `Ingredients: ${ingredients}`;
-            document.getElementById("drink-instructions").textContent = `Instructions: ${initialDrink.strInstructions}`;
+          document.getElementById("drink-link").textContent =
+            initialDrink.strDrink;
+          document.getElementById("drink-link").href =
+            "{{ url_for('drink_details', drink_id=drink.idDrink) }}";
+          document.getElementById(
+            "drink-category"
+          ).textContent = `Category: ${initialDrink.strCategory}`;
+          const ingredients = `${initialDrink.strIngredient1}, ${initialDrink.strIngredient2}, ...`;
+          document.getElementById(
+            "drink-ingredients"
+          ).textContent = `Ingredients: ${ingredients}`;
+          document.getElementById(
+            "drink-instructions"
+          ).textContent = `Instructions: ${initialDrink.strInstructions}`;
         }
-    }
+      }
 
-    // Call the function immediately to load the initial drink when the page loads
-    refreshWithInitialDrink();
+      // Call the function immediately to load the initial drink when the page loads
+      refreshWithInitialDrink();
 
-    // Function to load a random drink
-    function loadRandomDrink() {
+      // Function to load a random drink
+      function loadRandomDrink() {
         fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php")
-            .then(response => response.json())
-            .then(data => {
-                const drink = data.drinks[0];
-                if (drink) {
-                    if (!initialDrink) {
-                        initialDrink = drink; // Store the initial drink
-                    }
-                    document.getElementById("drink-link").textContent = drink.strDrink;
-                    document.getElementById("drink-link").href = "{{ url_for('drink_details', drink_id='' ) }}"+ drink.idDrink;
-                    document.getElementById("drink-category").textContent = `Category: ${drink.strCategory}`;
-                    const ingredients = `${drink.strIngredient1}, ${drink.strIngredient2}, ...`;
-                    document.getElementById("drink-ingredients").textContent = `Ingredients: ${ingredients}`;
-                    document.getElementById("drink-instructions").textContent = `Instructions: ${drink.strInstructions}`;
-                } else {
-                    document.getElementById("drink-link").textContent = "No drink data available.";
-                    document.getElementById("drink-link").href = "#";
-                    document.getElementById("drink-category").textContent = "";
-                    document.getElementById("drink-ingredients").textContent = "";
-                    document.getElementById("drink-instructions").textContent = "";
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching random drink:", error);
-            });
-    }
+          .then((response) => response.json())
+          .then((data) => {
+            const drink = data.drinks[0];
+            if (drink) {
+              if (!initialDrink) {
+                initialDrink = drink; // Store the initial drink
+              }
+              document.getElementById("drink-link").textContent =
+                drink.strDrink;
+              document.getElementById("drink-link").href =
+                "{{ url_for('drink_details', drink_id='' ) }}" + drink.idDrink;
+              document.getElementById(
+                "drink-category"
+              ).textContent = `Category: ${drink.strCategory}`;
+              const ingredients = `${drink.strIngredient1}, ${drink.strIngredient2}, ...`;
+              document.getElementById(
+                "drink-ingredients"
+              ).textContent = `Ingredients: ${ingredients}`;
+              document.getElementById(
+                "drink-instructions"
+              ).textContent = `Instructions: ${drink.strInstructions}`;
+            } else {
+              document.getElementById("drink-link").textContent =
+                "No drink data available.";
+              document.getElementById("drink-link").href = "#";
+              document.getElementById("drink-category").textContent = "";
+              document.getElementById("drink-ingredients").textContent = "";
+              document.getElementById("drink-instructions").textContent = "";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching random drink:", error);
+          });
+      }
 
-    // Load a random drink when the page loads
-    loadRandomDrink();
+      // Load a random drink when the page loads
+      loadRandomDrink();
 
-    // JavaScript to load another random drink when the button is clicked
-    document.getElementById("refresh-button").addEventListener("click", loadRandomDrink);
-</script>
-    
-    
-</body>
+      // JavaScript to load another random drink when the button is clicked
+      document
+        .getElementById("refresh-button")
+        .addEventListener("click", loadRandomDrink);
+    </script>
+  </body>
 </html>
