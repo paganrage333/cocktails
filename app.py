@@ -173,6 +173,8 @@ def user_add_like(drink_id):
 
     except Exception as e:
         print("######", e)
+
+    print("##liked drink##", liked_drink)
     
     user_likes = g.user.likes
 
@@ -187,9 +189,14 @@ def user_add_like(drink_id):
 
     return redirect("/")  # Redirect to the appropriate page after liking/unliking
 
-@app.route('/users/add_like/', methods=['POST'])
-def please_god():
-    return redirect("/")
+# @app.route('/users/add_like/<string:drink_id>', methods=['POST'])
+# def user_add_like(drink_id):
+
+#     liked_drink = Cocktail.query.get_or_404(drink_id)
+
+#     print("drink", drink_id)
+
+#     return redirect("/", liked_drink=liked_drink)
 
 @app.route('/liked_drinks', methods=['GET'])
 def liked_drinks():

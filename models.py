@@ -217,7 +217,7 @@ class Likes(db.Model):
         db.ForeignKey('users.id', ondelete='cascade')
     )
 
-    cocktail_id = db.Column(
+    drink_id = db.Column(
         db.String,
         db.ForeignKey('cocktails.id', ondelete='cascade'),
     )
