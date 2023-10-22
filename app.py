@@ -267,10 +267,11 @@ def ingredient_search():
 def name_search():
     form = CocktailForm()
 
-    search_term = form.search_term.data
-    cocktail_data = get_cocktail_by_name(search_term)
+    if request.method == "POST":
+        search_term = form.search_term.data
+        cocktail_data = get_cocktail_by_name(search_term)
 
-    if cocktail_data:
+        if cocktail_data:
             return render_template("results.html", cocktails=cocktail_data["drinks"])
         
     return render_template("searchform3.html", form=form)
