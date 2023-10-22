@@ -140,3 +140,11 @@ a:hover {
     padding: 50px;
     font-size: larger;
 }
+
+/* LOGIN / LOGOUT / SIGN UP STYLES */
+
+.log {
+    background-image: url(/static/assets/cocktail.png);
+    background-size: 88%;
+    display: flex;
+}

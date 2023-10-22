@@ -31,4 +31,5 @@ class LoginForm(FlaskForm):
 class CocktailForm(FlaskForm):
     liquor_preference = SelectField('Liquor Preference', choices=[('gin', 'Gin'), ('vodka', 'Vodka'), ('rum', 'Rum'), ('whiskey', 'Whiskey')])
     ingredient = StringField('Ingredient', validators=[DataRequired()])
+    search_term = StringField('Search Term', validators=[DataRequired()])
     submit = SubmitField('Search Cocktails')

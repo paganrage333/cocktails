@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, session, request, g, flash, abort, url_for
-from models import connect_db, db, get_cocktail_data, User, Cocktail, get_ingredient_data
+from models import connect_db, db, get_cocktail_data, User, Cocktail, get_ingredient_data, get_cocktail_by_name
 from sqlalchemy.exc import IntegrityError
 import requests
 from forms import UserAddForm, UserEditForm, LoginForm, CocktailForm
@@ -189,7 +189,7 @@ def user_add_like(drink_id):
 
 @app.route('/users/add_like/', methods=['POST'])
 def please_god():
-    return redirect("/search")
+    return redirect("/")
 
 @app.route('/liked_drinks', methods=['GET'])
 def liked_drinks():
@@ -262,6 +262,18 @@ def ingredient_search():
             return render_template("results.html", cocktails=cocktail_data["drinks"])
         
     return render_template("searchform2.html", form=form)
+
+@app.route("/namesearch", methods=["GET", "POST"])
+def name_search():
+    form = CocktailForm()
+
+    search_term = form.search_term.data
+    cocktail_data = get_cocktail_by_name(search_term)
+
+    if cocktail_data:
+            return render_template("results.html", cocktails=cocktail_data["drinks"])
+        
+    return render_template("searchform3.html", form=form)
 
 @app.route("/results", methods=["GET"])
 def results():
