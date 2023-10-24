@@ -20,33 +20,34 @@
         {% endif %}
     </nav>
     <h1>Liked Drinks</h1>
-    
-    {% if liked_drinks %}
-        <ul>
-            {% for drink in liked_drinks %}
-                <li>
-                    <h2>{{ drink.strDrink }}</h2>
-                    <img class="thumb" src="{{ drink.strDrinkThumb }}">
-                    <p>Category: {{ drink.strCategory }}</p>
-                    <p>Ingredients:</p>
-                    <ul>
-                        {% for i in range(1, 16) %}
-                            {% with ingredient = drink['strIngredient' ~ i] %}
-                                {% with measure = drink['strMeasure' ~ i] %}
-                                    {% if ingredient %}
-                                        <li>{{ measure }}{{ ingredient }}</li>
-                                    {% endif %}
-                                {% endwith %}
+
+{% if liked_drinks %}
+    <ul>
+        {% for liked_drink in liked_drinks %}
+            <li>
+                <h2>{{ liked_drink.cocktail.strDrink }}</h2>
+                <img class="thumb" src="{{ liked_drink.cocktail.strDrinkThumb }}">
+                <p>Category: {{ liked_drink.cocktail.strCategory }}</p>
+                <p>Ingredients:</p>
+                <ul>
+                    {% for i in range(1, 16) %}
+                        {% with ingredient = liked_drink.cocktail['strIngredient' ~ i] %}
+                            {% with measure = liked_drink.cocktail['strMeasure' ~ i] %}
+                                {% if ingredient %}
+                                    <li>{{ measure }}{{ ingredient }}</li>
+                                {% endif %}
                             {% endwith %}
-                        {% endfor %}
-                    </ul>
-                    <p>Instructions: {{ drink.strInstructions }}</p>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No liked drinks available.</p>
-    {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                </ul>
+                <p>Instructions: {{ liked_drink.cocktail.strInstructions }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No liked drinks available.</p>
+{% endif %}
+
     
     <a href="/">Return Home</a>
 </body>

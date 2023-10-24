@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, request, g, flash, abort, url_for
-from models import connect_db, db, get_cocktail_data, User, Cocktail, get_ingredient_data, get_cocktail_by_name
+from models import connect_db, db, get_cocktail_data, User, Cocktail, get_ingredient_data, get_cocktail_by_name, Like, create_cocktail_from_api
 from sqlalchemy.exc import IntegrityError
-import requests
+import requests, json
 from forms import UserAddForm, UserEditForm, LoginForm, CocktailForm
 
 CURR_USER_KEY = "curr_user"
@@ -162,32 +162,43 @@ def user_add_like(drink_id):
     # Debug: Print drink_id to check its value
     print("drink_id:", drink_id)
 
-    print("id type", type(drink_id)) #print id type
-    
+    print("id type", type(drink_id))  # Print id type
 
-    # # Debug: Print liked_drink details to check if it exists
-    # print("liked_drink:", liked_drink)
+    user_id = g.user.id
 
     try:
-        liked_drink = Cocktail.query.get_or_404(drink_id)  
+        # Fetch drink data from the API
+        api_url = f"https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i={drink_id}"
+        response = requests.get(api_url)
+        response.raise_for_status()
+        api_data = response.json()
+    except requests.exceptions.RequestException as e:
+        # Handle request errors
+        flash("Error fetching drink details from the API", "danger")
+        return redirect("/")
 
-    except Exception as e:
-        print("######", e)
-
-    print("##liked drink##", liked_drink)
+    print("####API DATA###", api_data)
     
-    user_likes = g.user.likes
+    # Convert drink_id to a string before using it in the query
+    drink_id = str(drink_id)
 
-    if liked_drink in user_likes:
-        # User already liked this drink, so unlike it
-        g.user.likes = [like for like in user_likes if like != liked_drink]
+    create_cocktail_from_api(drink_id)
+
+    # Check if a like with the same user_id and drink_id already exists
+    existing_like = Like.query.filter_by(user_id=user_id, drink_id=drink_id).first()
+
+    if existing_like:
+        # Like already exists, you can update or handle it as needed
+        flash("You have already liked this drink.", "warning")
     else:
-        # User hasn't liked this drink, so add it to their likes
-        g.user.likes.append(liked_drink)
+        # Like doesn't exist, add a new like
+        like = Like(user_id=user_id, drink_id=drink_id)
+        db.session.add(like)
+        db.session.commit()
+        flash("You have liked this drink.", "success")
 
-    db.session.commit()
+    return redirect("/")
 
-    return redirect("/")  # Redirect to the appropriate page after liking/unliking
 
 # @app.route('/users/add_like/<string:drink_id>', methods=['POST'])
 # def user_add_like(drink_id):
@@ -206,8 +217,12 @@ def liked_drinks():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    # Fetch the liked drinks for the user
-    liked_drinks = g.user.liked_cocktails
+    user_id = g.user.id
+
+    liked_drinks = Like.query.filter_by(user_id=user_id).all()
+    drink_ids = [liked.drink_id for liked in liked_drinks]
+
+    drinks = [Cocktail.query.get(drink_id) for drink_id in drink_ids]
 
     return render_template("liked_drinks.html", liked_drinks=liked_drinks)
 
@@ -220,6 +235,8 @@ def homepage():
     if response.status_code == 200:
         data = response.json()
         drink = data['drinks'][0]  # Get the first drink from the response
+
+        create_cocktail_from_api(drink['idDrink'])
     else:
         drink = None
 

@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from sqlalchemy.exc import IntegrityError
 import requests
+from flask import g 
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -78,6 +80,39 @@ def get_cocktail_by_name(search_term):
         print(f"JSON Decoding Error: {e}")
         return None
 
+def create_cocktail_from_api(drink_id):
+    # Check if the cocktail with the given drink_id already exists in the database.
+    existing_cocktail = Cocktail.query.get(drink_id)
+
+    if not existing_cocktail:
+        # If it doesn't exist, fetch data from the API.
+        response = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i={drink_id}')
+
+        if response.status_code == 200:
+            api_data = response.json()['drinks'][0]
+
+            # Extract relevant data from the API response.
+            strDrink = api_data['strDrink']
+            strCategory = api_data['strCategory']
+            strInstructions = api_data['strInstructions']
+
+            # Create a new Cocktail record in your database.
+            new_cocktail = Cocktail(id=drink_id, strDrink=strDrink, strCategory=strCategory, strInstructions=strInstructions)
+            db.session.add(new_cocktail)
+
+    # Now you can proceed to add the like for the user.
+    # Check if the user has already liked this cocktail.
+    existing_like = Like.query.filter_by(user_id=g.user.id, drink_id=drink_id).first()
+
+    if not existing_like:
+        like = Like(user_id=g.user.id, drink_id=drink_id)
+        db.session.add(like)
+
+    db.session.commit()
+
+
+
+
 class Cocktail(db.Model):
     """Cocktail data model."""
 
@@ -101,7 +136,7 @@ class Cocktail(db.Model):
         db.Text
     )
 
-    likes = db.relationship('Likes', back_populates='cocktail')
+    likes = db.relationship('Like', back_populates='cocktail')
 
     liked_by_users = db.relationship('User', secondary='likes', back_populates='liked_cocktails', overlaps="likes")
 
@@ -155,7 +190,7 @@ class User(db.Model):
     )
 
     likes = db.relationship(
-        'Likes',
+        'Like',
         back_populates='user',
         overlaps="liked_by_users"
     )
@@ -202,8 +237,8 @@ class User(db.Model):
         return False
     
     
-class Likes(db.Model):
-    """Mapping user likes to warbles."""
+class Like(db.Model):
+    """Mapping user likes to drinks."""
 
     __tablename__ = 'likes' 
 
