@@ -7,8 +7,8 @@ from forms import UserAddForm, UserEditForm, LoginForm, CocktailForm
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cocktails'
-app.config['SECRET_KEY'] = 'colada'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://cdqlhnwl:hdyss7l2CN1ZpEKwdxM_9T9iCiPJpFqN@heffalump.db.elephantsql.com/cdqlhnwl'
+app.config['SECRET_KEY'] = 'tingaling155'
 app.app_context().push()
 
 connect_db(app)
