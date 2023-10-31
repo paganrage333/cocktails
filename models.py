@@ -8,6 +8,7 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 
+
 def get_cocktail_data(liquor_preference):
     base_url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php"
 
