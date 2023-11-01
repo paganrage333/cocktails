@@ -101,11 +101,10 @@ def create_cocktail_from_api(drink_id):
             new_cocktail = Cocktail(id=drink_id, strDrink=strDrink, strCategory=strCategory, strInstructions=strInstructions)
             db.session.add(new_cocktail)
 
-    # Now you can proceed to add the like for the user.
     # Check if the user has already liked this cocktail.
     existing_like = Like.query.filter_by(user_id=g.user.id, drink_id=drink_id).first()
 
-    if not existing_like:
+    if existing_like is None:
         like = Like(user_id=g.user.id, drink_id=drink_id)
         db.session.add(like)
 

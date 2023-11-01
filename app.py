@@ -1,13 +1,14 @@
 from flask import Flask, render_template, redirect, session, request, g, flash, abort, url_for
 from models import connect_db, db, get_cocktail_data, User, Cocktail, get_ingredient_data, get_cocktail_by_name, Like, create_cocktail_from_api
 from sqlalchemy.exc import IntegrityError
-import requests, json
+import requests, json, os
 from forms import UserAddForm, UserEditForm, LoginForm, CocktailForm
 
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://cdqlhnwl:hdyss7l2CN1ZpEKwdxM_9T9iCiPJpFqN@heffalump.db.elephantsql.com/cdqlhnwl'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cocktails'
 app.config['SECRET_KEY'] = 'tingaling155'
 app.app_context().push()
 
@@ -238,7 +239,7 @@ def homepage():
         data = response.json()
         drink = data['drinks'][0]  # Get the first drink from the response
 
-        create_cocktail_from_api(drink['idDrink'])
+        # create_cocktail_from_api(drink['idDrink'])
     else:
         drink = None
 
